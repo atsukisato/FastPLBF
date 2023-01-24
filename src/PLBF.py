@@ -2,7 +2,7 @@ from utils.ThresMaxDivDP import ThresMaxDivDP
 from utils.OptimalFPR import OptimalFPR
 from utils.SpaceUsed import SpaceUsed
 from utils.prList import prList
-from utils.const import INF
+from utils.const import INF, EPS
 
 import bisect
 from bloom_filter import BloomFilter
@@ -86,6 +86,9 @@ class PLBF:
         for i in range(1, self.k + 1):
             if 0 < self.f[i] < 1:
                 self.backup_bloom_filters[i] = BloomFilter(max_elements = pos_cnt_list[i], error_rate = self.f[i])
+            elif self.f[i] == 0:
+                assert(pos_cnt_list[i] == 0)
+                self.backup_bloom_filters[i] = BloomFilter(max_elements = 1, error_rate = 1 - EPS)
         
         for key, score in zip(pos_keys, pos_scores):
             region_idx = self.get_region_idx(score)
@@ -127,7 +130,7 @@ if __name__ == "__main__":
     F = results.F
 
     data = pd.read_csv(DATA_PATH)
-    negative_sample = data.loc[(data['label'] == 0)]
+    negative_sample = data.loc[(data['label'] != 1)]
     positive_sample = data.loc[(data['label'] == 1)]
     train_negative, test_negative = train_test_split(negative_sample, test_size = 0.7, random_state = 0)
     
@@ -151,11 +154,10 @@ if __name__ == "__main__":
     for key, score in zip(pos_keys, pos_scores):
         assert(plbf.contains(key, score))
     
+    # test
     fp_cnt = 0
     for key, score in zip(test_neg_keys, test_neg_scores):
         if plbf.contains(key, score):
             fp_cnt += 1
     
     print(f"False Positive Rate: {fp_cnt / len(test_neg_keys)} [{fp_cnt} / {len(test_neg_keys)}]")
-
-

@@ -29,6 +29,8 @@ def SpaceUsed(g: prList, h: prList, t: list[float], f: list[float], n: int) -> f
     for i in range(1, k+1):
         pos_pr = g.acc_range(t[i-1], t[i])
         pos_num = pos_pr * n
+        if pos_num == 0:
+            continue
         fpr = f[i]
         hash_num = math.log(fpr) / math.log(0.5)
         m = hash_num * pos_num / math.log(2)
