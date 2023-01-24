@@ -59,3 +59,7 @@ if __name__ == "__main__":
 
     plbf = PLBF(g, h, F, N, k, n)
     
+    print("t:", plbf.t)
+    print("f:", plbf.f)
+
+
