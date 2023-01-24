@@ -44,9 +44,9 @@ class FastPLBFpp:
             t = ThresMaxDiv(DPPre, j, k, self.segmenet_thre_list)
             f = OptimalFPR(self.g, self.h, t, F, k)
 
-            print("t:", t)
-            print("f:", f)
-            print("S:", SpaceUsed(self.g, self.h, t, f, n))
+            # print("t:", t)
+            # print("f:", f)
+            # print("S:", SpaceUsed(self.g, self.h, t, f, n))
 
             if minSpaceUsed > SpaceUsed(self.g, self.h, t, f, n):
                 minSpaceUsed = SpaceUsed(self.g, self.h, t, f, n)
@@ -68,7 +68,7 @@ if __name__ == "__main__":
     print("Fast PLBF++ ------------------")
 
 
-    
+
     g = [0.1, 0.1, 0.1, 0.2, 0.2, 0.3]
     h = [0.3, 0.2, 0.2, 0.15, 0.1, 0.05]
     F = 0.01
