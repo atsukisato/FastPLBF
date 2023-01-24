@@ -1,8 +1,8 @@
-import math
 from utils.ThresMaxDivDP import ThresMaxDivDP
 from utils.OptimalFPR import OptimalFPR
 from utils.SpaceUsed import SpaceUsed
 from utils.prList import prList
+from utils.const import INF
 
 class PLBF:
 
@@ -22,19 +22,24 @@ class PLBF:
         assert(len(h) == N)
 
         self.g = prList(g)
-        self.h = prList(g)
+        self.h = prList(h)
         self.F = F
         self.N = N
         self.k = k
 
         ### find t_best, f_best
-        minSpaceUsed = -math.inf
+        minSpaceUsed = INF
         t_best = None
         f_best = None
         for j in range(k, N+1):
             t = ThresMaxDivDP(self.g, self.h, j, k)
             f = OptimalFPR(self.g, self.h, t, F, k)
-            if minSpaceUsed < SpaceUsed(self.g, self.h, t, f, n):
+
+            # print("t:", t)
+            # print("f:", f)
+            # print("S:", SpaceUsed(self.g, self.h, t, f, n))
+
+            if minSpaceUsed > SpaceUsed(self.g, self.h, t, f, n):
                 minSpaceUsed = SpaceUsed(self.g, self.h, t, f, n)
                 t_best = t
                 f_best = f
@@ -42,7 +47,7 @@ class PLBF:
         self.t = t_best
         self.f = f_best
 
-    def insert(self, key):
+    def insert(self, key, score):
         pass
 
     def contains(self, x):
@@ -54,7 +59,7 @@ if __name__ == "__main__":
     h = [0.4, 0.3, 0.2, 0.1]
     F = 0.01
     N = 4
-    k = 2
+    k = 3
     n = 100
 
     plbf = PLBF(g, h, F, N, k, n)

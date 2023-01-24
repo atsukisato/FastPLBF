@@ -1,5 +1,5 @@
 import math
-
+from utils.const import EPS
 
 class prList:
 
@@ -20,7 +20,10 @@ class prList:
             self.pr[i+1] = pr[i]
             self.accPr[i+1] = self.accPr[i] + pr[i]
         
-        assert(self.accPr[self.N] == 1.0)
+        assert(abs(self.accPr[self.N] - 1.0) < EPS), self.accPr[self.N]
+
+        self.segmenet_thre_list = [i / self.N for i in range(self.N + 1)]
+
 
     def get_th_idx(self, score: float) -> int:
         """
@@ -73,4 +76,33 @@ class prList:
 
         return self.accPr[idx_r] - self.accPr[idx_l]
     
+    def acc_idx(self, idx: int) -> float:
+        """
+
+        Args:
+            idx (int): idx \in {1 ... N}
+
+        Returns:
+            float: sum of self.pr[1...idx]
+        """
         
+        assert(1 <= idx <= self.N)
+
+        return self.accPr[idx]
+
+    def acc_range_idx(self, idx_l: int, idx_r: int) -> float:
+        """
+
+        Args:
+            idx_l (int): idx \in {1 ... N}
+            idx_l (int): idx \in {1 ... N}
+
+        Returns:
+            float: sum of self.pr[idx_l...idx_r]
+        """
+
+        assert(1 <= idx_l <= self.N)
+        assert(1 <= idx_r <= self.N)
+        
+        return self.accPr[idx_r] - self.accPr[idx_l - 1]
+

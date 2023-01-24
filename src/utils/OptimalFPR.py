@@ -1,5 +1,5 @@
-import math
 from utils.prList import prList
+from utils.const import EPS
 
 def OptimalFPR(g: prList, h: prList, t: list[float], F: float, k: int) -> list[float]:
     """_summary_
@@ -22,8 +22,8 @@ def OptimalFPR(g: prList, h: prList, t: list[float], F: float, k: int) -> list[f
     pos_pr_list = [g.acc_range(t[i-1], t[i]) for i in range(1, k+1)]
     neg_pr_list = [h.acc_range(t[i-1], t[i]) for i in range(1, k+1)]
 
-    assert(sum(pos_pr_list) == 1)
-    assert(sum(neg_pr_list) == 1)
+    assert(abs(sum(pos_pr_list) - 1) < EPS)
+    assert(abs(sum(neg_pr_list) - 1) < EPS)
 
     valid_list = [True for i in range(k)]
     while True:
