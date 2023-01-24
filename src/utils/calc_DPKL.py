@@ -43,24 +43,6 @@ def calc_DPKL(g: prList, h: prList, k: int) -> Tuple[list[list[float]], list[lis
                 if DPKL[n][j] < tmp_sum:
                     DPKL[n][j] = tmp_sum
                     DPPre[n][j] = i-1
-            
-    # for j in range(K + 1):
-    #     row = ""
-    #     for n in range(N + 1):
-    #         if DPPre[n][j][0] is None:
-    #             row += "  _"
-    #         else:
-    #             if DPPre[n][j][0] < 10:
-    #                 row += f"  {DPPre[n][j][0]}"
-    #             else:
-    #                 row += f" {DPPre[n][j][0]}"
-    #     print(row)
-    
-    # for j in range(K + 1):
-    #     row = []
-    #     for n in range(N + 1):
-    #         row.append(DPKL[n][j])
-    #     print(dekoboko_str(row))
 
     return DPKL, DPPre
 

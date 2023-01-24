@@ -2,6 +2,8 @@ import math
 from typing import Tuple
 from utils.prList import prList
 from utils.const import INF
+from utils.matrix_problem_on_monotone_matrix import matrix_problem_on_monotone_matrix
+
 
 
 def fast_calc_DPKL(g: prList, h: prList, k: int) -> Tuple[list[list[float]], list[list[int]]]:
@@ -27,42 +29,40 @@ def fast_calc_DPKL(g: prList, h: prList, k: int) -> Tuple[list[list[float]], lis
     DPKL[0][0] = 0
     for j in range(1, k + 1):
         
+        def func_A(p: int, i: int) -> float:
+            """
+            func_A(p, i) 
+            = A_{pi}
+
+            = { -INF                        (i = p+1, p+2, ..., N-1)
+              { DPKL[i-1][j-1] + dkl(i, p)  (i = 1, ..., p)
+
+            Args:
+                p (int): \in {1 ... N}
+                i (int): \in {1 ... N}
+
+            Returns:
+                float: A_{pi}
+            """
+
+            assert(isinstance(i, int))
+            assert(isinstance(p, int))
+            assert(1 <= i <= N)
+            assert(1 <= p <= N)
+            
+            if i >= p+1:
+                return -INF
+            
+            Pos = g.acc_range_idx(i, p)
+            Neg = h.acc_range_idx(i, p)
+            return DPKL[i-1][j-1] + Pos * math.log(Pos / Neg)
+
+        max_args = matrix_problem_on_monotone_matrix(func_A, N, N)
 
         for n in range(1, N + 1):
-            for i in range(1, n + 1):
-                # i-th to n-th segments are clustered into j-th region
-
-                Pos = g.acc_range_idx(i, n)
-                Neg = h.acc_range_idx(i, n)
-                
-                if Neg == 0:
-                    continue
-                if Pos == 0:
-                    tmp_sum = DPKL[i-1][j-1] + 0
-                else:
-                    tmp_sum = DPKL[i-1][j-1] + Pos * math.log(Pos / Neg)
-
-                if DPKL[n][j] < tmp_sum:
-                    DPKL[n][j] = tmp_sum
-                    DPPre[n][j] = i-1
-            
-    # for j in range(K + 1):
-    #     row = ""
-    #     for n in range(N + 1):
-    #         if DPPre[n][j][0] is None:
-    #             row += "  _"
-    #         else:
-    #             if DPPre[n][j][0] < 10:
-    #                 row += f"  {DPPre[n][j][0]}"
-    #             else:
-    #                 row += f" {DPPre[n][j][0]}"
-    #     print(row)
-    
-    # for j in range(K + 1):
-    #     row = []
-    #     for n in range(N + 1):
-    #         row.append(DPKL[n][j])
-    #     print(dekoboko_str(row))
+            pre = max_args[n]
+            DPKL[n][j] = func_A(n, pre)
+            DPPre[n][j] = pre-1
 
     return DPKL, DPPre
 
