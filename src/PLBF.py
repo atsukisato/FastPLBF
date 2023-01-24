@@ -4,79 +4,158 @@ from utils.SpaceUsed import SpaceUsed
 from utils.prList import prList
 from utils.const import INF
 
+import bisect
+from bloom_filter import BloomFilter
+import pandas as pd
+from sklearn.model_selection import train_test_split
+
+import argparse
+
 class PLBF:
-
-    def __init__(self, g: list[float], h: list[float], F: float, N: int, k: int, n: int):
+    def __init__(self, pos_keys: list, pos_scores: list[float], neg_scores: list[float], F: float, N: int, k: int):
         """
-
         Args:
-            g (list[float]): key density of each segmenet (0-index)
-            h (list[float]): non-keye density of each segmenet (0-index)
+            pos_keys (list): keys
+            pos_scores (list[float]): scores of keys
+            neg_scores (list[float]): scores of non-keys
             F (float): target overall fpr
             N (int): number of segments
             k (int): number of regions
-            n (int); number of keys
         """
 
-        assert(len(g) == N)
-        assert(len(h) == N)
+        self.assert_and_init_parameters(pos_keys, pos_scores, neg_scores, F, N, k)
+        segment_thre_list, g, h = self.divide_into_segments(pos_scores, neg_scores)
+        self.find_best_t_and_f(segment_thre_list, g, h)
+        self.insert_keys(pos_keys, pos_scores)
+
+    def assert_and_init_parameters(self, pos_keys: list, pos_scores: list[float], neg_scores: list[float], F: float, N: int, k: int):
+        # assert 
+        assert(isinstance(pos_keys, list))
+        assert(isinstance(pos_scores, list))
+        assert(len(pos_keys) == len(pos_scores))
+        assert(isinstance(neg_scores, list))
+        assert(isinstance(F, float))
         assert(0 < F < 1)
         assert(isinstance(N, int))
         assert(isinstance(k, int))
-        assert(isinstance(n, int))
 
+        for score in pos_scores:
+            assert(0 <= score <= 1)
+        for score in neg_scores:
+            assert(0 <= score <= 1)
 
-        self.g = prList(g)
-        self.h = prList(h)
-        self.segmenet_thre_list = (self.g).segmenet_thre_list
-
+        # init
         self.F = F
         self.N = N
         self.k = k
+        self.n = len(pos_keys)
 
-        ### find t_best, f_best
+    def divide_into_segments(self, pos_scores: list[float], neg_scores: list[float]):
+        segment_thre_list = [i / self.N for i in range(self.N + 1)]
+        g = prList(pos_scores, segment_thre_list)
+        h = prList(neg_scores, segment_thre_list)
+        return segment_thre_list, g, h
+
+    def find_best_t_and_f(self, segment_thre_list, g, h):
         minSpaceUsed = INF
         t_best = None
         f_best = None
 
-        for j in range(k, N+1):
-            t = ThresMaxDivDP(self.g, self.h, j, k)
-            f = OptimalFPR(self.g, self.h, t, F, k)
-
-            # print("t:", t)
-            # print("f:", f)
-            # print("S:", SpaceUsed(self.g, self.h, t, f, n))
-
-            if minSpaceUsed > SpaceUsed(self.g, self.h, t, f, n):
-                minSpaceUsed = SpaceUsed(self.g, self.h, t, f, n)
+        for j in range(self.k, self.N+1):
+            t = ThresMaxDivDP(g, h, j, self.k)
+            if t is None:
+                continue
+            f = OptimalFPR(g, h, t, self.F, self.k)
+            if minSpaceUsed > SpaceUsed(g, h, t, f, self.n):
+                minSpaceUsed = SpaceUsed(g, h, t, f, self.n)
                 t_best = t
                 f_best = f
 
         self.t = t_best
         self.f = f_best
-        self.memory_backup_bf = minSpaceUsed
+        self.memory_usage_of_backup_bf = minSpaceUsed
 
-    def insert(self, key, score):
-        pass
+    def insert_keys(self, pos_keys: list, pos_scores: list[float]):
+        pos_cnt_list = [0 for _ in range(self.k + 1)]
+        for score in pos_scores:
+            region_idx = self.get_region_idx(score)
+            pos_cnt_list[region_idx] += 1
+        
 
-    def contains(self, x):
-        pass
+        self.backup_bloom_filters = [None for _ in range(self.k + 1)]
+        for i in range(1, self.k + 1):
+            if 0 < self.f[i] < 1:
+                self.backup_bloom_filters[i] = BloomFilter(max_elements = pos_cnt_list[i], error_rate = self.f[i])
+        
+        for key, score in zip(pos_keys, pos_scores):
+            region_idx = self.get_region_idx(score)
+            if self.backup_bloom_filters[region_idx] is not None:
+                self.backup_bloom_filters[region_idx].add(key)
+
+    def get_region_idx(self, score):
+        region_idx = bisect.bisect_left(self.t, score)
+        if region_idx == 0:
+            region_idx = 1
+        return region_idx
+
+    def contains(self, key, score):
+        assert(0 <= score <= 1)
+        region_idx = self.get_region_idx(score)
+        if self.backup_bloom_filters[region_idx] is None:
+            return True
+        
+        return (key in self.backup_bloom_filters[region_idx])
+
 
 
 if __name__ == "__main__":
-    print("PLBF ------------------")
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--data_path', action="store", dest="data_path", type=str, required=True,
+                        help="path of the dataset")
+    parser.add_argument('--N', action="store", dest="N", type=int, required=True,
+                        help="N: the number of segments")
+    parser.add_argument('--k', action="store", dest="k", type=int, required=True,
+                        help="k: the number of regions")
+    parser.add_argument('--F', action="store", dest="F", type=float, required=True,
+                        help="F: the target overall fpr")
 
+    results = parser.parse_args()
 
+    DATA_PATH = results.data_path
+    N = results.N
+    k = results.k
+    F = results.F
+
+    data = pd.read_csv(DATA_PATH)
+    negative_sample = data.loc[(data['label'] == 0)]
+    positive_sample = data.loc[(data['label'] == 1)]
+    train_negative, test_negative = train_test_split(negative_sample, test_size = 0.7, random_state = 0)
     
-    g = [0.1, 0.1, 0.1, 0.2, 0.2, 0.3]
-    h = [0.3, 0.2, 0.2, 0.15, 0.1, 0.05]
-    F = 0.01
-    N = 6
-    k = 3
-    n = 100
 
-    plbf = PLBF(g, h, F, N, k, n)
+    pos_keys            = list(positive_sample['key'])
+    pos_scores          = list(positive_sample['score'])
+    train_neg_keys      = list(train_negative['key'])
+    train_neg_scores    = list(train_negative['score'])
+    test_neg_keys       = list(test_negative['key'])
+    test_neg_scores     = list(test_negative['score'])
+
+
+    plbf = PLBF(pos_keys, pos_scores, train_neg_scores, F, N, k)
     
     print("t:", plbf.t)
     print("f:", plbf.f)
-    print("S_:", plbf.memory_backup_bf)
+    print("S_:", plbf.memory_usage_of_backup_bf)
+
+
+    # assert
+    for key, score in zip(pos_keys, pos_scores):
+        assert(plbf.contains(key, score))
+    
+    fp_cnt = 0
+    for key, score in zip(test_neg_keys, test_neg_scores):
+        if plbf.contains(key, score):
+            fp_cnt += 1
+    
+    print(f"False Positive Rate: {fp_cnt / len(test_neg_keys)} [{fp_cnt} / {len(test_neg_keys)}]")
+
+

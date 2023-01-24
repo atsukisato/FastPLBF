@@ -1,29 +1,46 @@
 import math
 from utils.const import EPS
+import bisect
 
 class prList:
 
-    def __init__(self, pr: list[float]):
+    def __init__(self, scores: list[float], thre_list: list[float]):
         """
-        make a prList
-            - 1-index
-            - has accumulate list
 
         Args:
-            prlist (list[float]): prlist (0-index)
+            scores (list[float]): a list of scores
+            thre_list (list[float]): thresholds for divide scores into segment
+
         """
+
+        assert(thre_list[0] == 0)
+        assert(thre_list[-1] == 1)
+
+        self.thre_list = thre_list
+        self.N = len(thre_list) - 1
+
+        cnt_list = [0 for _ in range(self.N + 1)]
+        for score in scores:
+            assert(0 <= score <= 1)
+
+            segment_idx = bisect.bisect_left(thre_list, score)
+            if segment_idx == 0:
+                assert(score == 0)
+                segment_idx = 1
+
+            assert(1 <= segment_idx <= self.N)
+
+            cnt_list[segment_idx] += 1
         
-        self.N = len(pr)
+        total_cnt = len(scores)
+
         self.pr = [0.0 for i in range(self.N+1)]
         self.accPr = [0.0 for i in range(self.N+1)]
-        for i in range(self.N):
-            self.pr[i+1] = pr[i]
-            self.accPr[i+1] = self.accPr[i] + pr[i]
-        
+        for i in range(1, self.N + 1):
+            self.pr[i] = cnt_list[i] / total_cnt
+            self.accPr[i] = self.accPr[i - 1] + self.pr[i]
+    
         assert(abs(self.accPr[self.N] - 1.0) < EPS), self.accPr[self.N]
-
-        self.segmenet_thre_list = [i / self.N for i in range(self.N + 1)]
-
 
     def get_th_idx(self, score: float) -> int:
         """

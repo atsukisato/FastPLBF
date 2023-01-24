@@ -2,6 +2,8 @@ from typing import Tuple
 from utils.prList import prList
 from utils.calc_DPKL import calc_DPKL
 from utils.fast_calc_DPKL import fast_calc_DPKL
+from utils.const import INF
+
 
 def ThresMaxDivDP(g: prList, h: prList, j: int, k: int) -> list[float]:
     """_summary_
@@ -27,18 +29,26 @@ def ThresMaxDivDP(g: prList, h: prList, j: int, k: int) -> list[float]:
     DPKL, DPPre = calc_DPKL(g, h, k)
 
     # DPPre[j-1][k-1]から逆にたどっていく
+    if DPPre[j-1][k-1] is None:
+        return None
+
     reversed_t = [1.0]
 
     now = j-1
-    reversed_t.append(g.segmenet_thre_list[now])
+    reversed_t.append(g.thre_list[now])
     for i in reversed(range(1, k)):
         now = DPPre[now][i]
-        reversed_t.append(g.segmenet_thre_list[now])
+        reversed_t.append(g.thre_list[now])
     
     t = list(reversed(reversed_t))
 
     assert(len(t) == k+1)
     return t
+
+
+
+
+
 
 def MaxDivDP(g: prList, h: prList, N: int, k: int) -> Tuple[list[list[float]], list[list[int]]]:
     """
@@ -63,7 +73,7 @@ def MaxDivDP(g: prList, h: prList, N: int, k: int) -> Tuple[list[list[float]], l
     DPKL, DPPre = calc_DPKL(g, h, k)
     return DPKL, DPPre
 
-def ThresMaxDiv(DPPre: list[list[int]], j: int, k: int, segmenet_thre_list: list[float]):
+def ThresMaxDiv(DPPre: list[list[int]], j: int, k: int, thre_list: list[float]):
     """
 
     Args:
@@ -77,13 +87,18 @@ def ThresMaxDiv(DPPre: list[list[int]], j: int, k: int, segmenet_thre_list: list
     assert(isinstance(k, int))
     
     # DPPre[j-1][k-1]から逆にたどっていく
+    if DPPre[j-1][k-1] is None:
+        return None
+
     reversed_t = [1.0]
 
     now = j-1
-    reversed_t.append(segmenet_thre_list[now])
+    reversed_t.append(thre_list[now])
     for i in reversed(range(1, k)):
         now = DPPre[now][i]
-        reversed_t.append(segmenet_thre_list[now])
+        if now is None:
+            return None
+        reversed_t.append(thre_list[now])
     
     t = list(reversed(reversed_t))
 

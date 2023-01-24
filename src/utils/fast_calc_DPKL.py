@@ -55,6 +55,12 @@ def fast_calc_DPKL(g: prList, h: prList, k: int) -> Tuple[list[list[float]], lis
             
             Pos = g.acc_range_idx(i, p)
             Neg = h.acc_range_idx(i, p)
+
+            if Neg == 0:
+                return -INF
+            if Pos == 0:
+                return DPKL[i-1][j-1] + 0
+
             return DPKL[i-1][j-1] + Pos * math.log(Pos / Neg)
 
         max_args = matrix_problem_on_monotone_matrix(func_A, N, N)

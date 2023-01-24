@@ -62,10 +62,10 @@ def OptimalFPR(g: prList, h: prList, t: list[float], F: float, k: int) -> list[f
         for idx, (n_pos_pr, n_neg_pr) in enumerate(zip(normed_pos_pr_list, normed_neg_pr_list)):
             if not valid_list[idx]:
                 opt_fpr_list[idx] = 1
-            # elif n_neg_pr == 0:
-            #     assert(0 == 1)
+            elif n_pos_pr == 0:
+                opt_fpr_list[idx] = 1
             else:
-                opt_fpr_list[idx] = normed_F * n_pos_pr / n_neg_pr
+                opt_fpr_list[idx] = min(1, normed_F * n_pos_pr / (n_neg_pr + EPS))
         
         ok = True
         for idx, opt_fpr in enumerate(opt_fpr_list):
