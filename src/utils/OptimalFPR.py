@@ -15,9 +15,14 @@ def OptimalFPR(g: prList, h: prList, t: list[float], F: float, k: int) -> list[f
         list[float]: FPRs of each region (1-index)
     """
 
+
+    assert(isinstance(g, prList))
+    assert(isinstance(h, prList))
+    assert(0 < F < 1)
+    assert(len(t) == k+1)
+    assert(isinstance(k, int))
     N = g.N
     assert(h.N == N)
-    assert(len(t) == k+1)
 
     pos_pr_list = [g.acc_range(t[i-1], t[i]) for i in range(1, k+1)]
     neg_pr_list = [h.acc_range(t[i-1], t[i]) for i in range(1, k+1)]

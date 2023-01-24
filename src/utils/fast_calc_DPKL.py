@@ -4,7 +4,7 @@ from utils.prList import prList
 from utils.const import INF
 
 
-def calc_DPKL(g: prList, h: prList, k: int) -> Tuple[list[list[float]], list[list[int]]]:
+def fast_calc_DPKL(g: prList, h: prList, k: int) -> Tuple[list[list[float]], list[list[int]]]:
     """
 
     Args:
@@ -25,8 +25,10 @@ def calc_DPKL(g: prList, h: prList, k: int) -> Tuple[list[list[float]], list[lis
     DPKL = [[-INF for _ in range(k + 1)] for _ in range(N + 1)]
     DPPre = [[None for _ in range(k + 1)] for _ in range(N + 1)]
     DPKL[0][0] = 0
-    for n in range(1, N + 1):
-        for j in range(1, k + 1):
+    for j in range(1, k + 1):
+        
+
+        for n in range(1, N + 1):
             for i in range(1, n + 1):
                 # i-th to n-th segments are clustered into j-th region
 

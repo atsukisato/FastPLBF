@@ -1,10 +1,10 @@
-from utils.ThresMaxDivDP import ThresMaxDivDP
+from utils.ThresMaxDivDP import fastMaxDivDP, ThresMaxDiv
 from utils.OptimalFPR import OptimalFPR
 from utils.SpaceUsed import SpaceUsed
 from utils.prList import prList
 from utils.const import INF
 
-class PLBF:
+class FastPLBFpp:
 
     def __init__(self, g: list[float], h: list[float], F: float, N: int, k: int, n: int):
         """
@@ -39,8 +39,9 @@ class PLBF:
         t_best = None
         f_best = None
 
+        DPKL, DPPre = fastMaxDivDP(self.g, self.h, N, k)
         for j in range(k, N+1):
-            t = ThresMaxDivDP(self.g, self.h, j, k)
+            t = ThresMaxDiv(DPPre, j, k, self.segmenet_thre_list)
             f = OptimalFPR(self.g, self.h, t, F, k)
 
             print("t:", t)
@@ -64,7 +65,7 @@ class PLBF:
 
 
 if __name__ == "__main__":
-    print("PLBF ------------------")
+    print("Fast PLBF++ ------------------")
 
 
     
@@ -75,8 +76,9 @@ if __name__ == "__main__":
     k = 3
     n = 100
 
-    plbf = PLBF(g, h, F, N, k, n)
-    
-    print("t:", plbf.t)
-    print("f:", plbf.f)
-    print("S_:", plbf.memory_backup_bf)
+    fast_plbf = FastPLBFpp(g, h, F, N, k, n)
+
+    print("t:", fast_plbf.t)
+    print("f:", fast_plbf.f)
+    print("S_:", fast_plbf.memory_backup_bf)
+

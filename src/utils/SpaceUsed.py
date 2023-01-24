@@ -14,13 +14,16 @@ def SpaceUsed(g: prList, h: prList, t: list[float], f: list[float], n: int) -> f
         float: spaceUsed
     """
 
+    assert(isinstance(g, prList))
+    assert(isinstance(h, prList))
+    assert(isinstance(n, int))
     N = g.N
     k = len(t) - 1
-
     assert(g.N == N)
     assert(h.N == N)
     assert(len(t) == k+1)
     assert(len(f) == k+1)
+
 
     spaceUsed = 0
     for i in range(1, k+1):
