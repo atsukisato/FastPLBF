@@ -44,7 +44,7 @@ def make_scores_list(pr_list, N, n):
             scores_list.append(score)
     return scores_list
 
-def test(test_times = 1, N = 1000, F = 0.001, k = 5, n = 1000000, test_neg_num = 1000000, ideal = True):
+def test(test_times = 1, N = 1000, F = 0.001, k = 5, pos_num = 50000, train_neg_num = 50000, test_neg_num = 50000, ideal = True):
 
     for seed in range(test_times):
         random.seed(seed)
@@ -53,8 +53,8 @@ def test(test_times = 1, N = 1000, F = 0.001, k = 5, n = 1000000, test_neg_num =
         else:
             g, h = create_not_ieal_g_h(N)
         
-        pos_scores = make_scores_list(g, N, n)
-        train_neg_scores = make_scores_list(h, N, n)
+        pos_scores = make_scores_list(g, N, pos_num)
+        train_neg_scores = make_scores_list(h, N, train_neg_num)
         test_neg_scores  = make_scores_list(h, N, test_neg_num)
 
         pos_keys = [f"key_{i}" for i in range(len(pos_scores))]
@@ -94,5 +94,5 @@ def test(test_times = 1, N = 1000, F = 0.001, k = 5, n = 1000000, test_neg_num =
     
 
 if __name__ == "__main__":
-    test(test_times = 100, ideal = True)
-    test(test_times = 100, ideal = False)
+    test(test_times = 10, ideal = True)
+    test(test_times = 10, ideal = False)

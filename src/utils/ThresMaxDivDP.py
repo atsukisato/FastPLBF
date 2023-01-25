@@ -26,7 +26,7 @@ def ThresMaxDivDP(g: prList, h: prList, j: int, k: int) -> list[float]:
     assert(h.N == N)
 
 
-    DPKL, DPPre = calc_DPKL(g, h, k)
+    DPKL, DPPre = calc_DPKL(g, h, k, j)
 
     #  tracing the transitions backward from DPPre[j-1][k-1]
     if DPPre[j-1][k-1] is None:
