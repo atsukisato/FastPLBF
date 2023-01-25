@@ -16,11 +16,7 @@ def calc_DPKL(g: prList, h: prList, k: int) -> Tuple[list[list[float]], list[lis
         Tuple[list[list[float]], list[list[int]]]: DPKL, DPPre
     """
 
-    assert(isinstance(g, prList))
-    assert(isinstance(h, prList))
-    assert(isinstance(k, int))
     N = g.N
-    assert(h.N == N)
 
     DPKL = [[-INF for _ in range(k + 1)] for _ in range(N + 1)]
     DPPre = [[None for _ in range(k + 1)] for _ in range(N + 1)]

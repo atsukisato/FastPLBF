@@ -20,7 +20,28 @@ class FastPLBFpp(PLBF):
             k (int): number of regions
         """
 
-        self.assert_and_init_parameters(pos_keys, pos_scores, neg_scores, F, N, k)
+        # assert 
+        assert(isinstance(pos_keys, list))
+        assert(isinstance(pos_scores, list))
+        assert(len(pos_keys) == len(pos_scores))
+        assert(isinstance(neg_scores, list))
+        assert(isinstance(F, float))
+        assert(0 < F < 1)
+        assert(isinstance(N, int))
+        assert(isinstance(k, int))
+
+        for score in pos_scores:
+            assert(0 <= score <= 1)
+        for score in neg_scores:
+            assert(0 <= score <= 1)
+
+        
+        self.F = F
+        self.N = N
+        self.k = k
+        self.n = len(pos_keys)
+
+
         segment_thre_list, g, h = self.divide_into_segments(pos_scores, neg_scores)
         self.find_best_t_and_f(segment_thre_list, g, h)
         self.insert_keys(pos_keys, pos_scores)
@@ -31,7 +52,7 @@ class FastPLBFpp(PLBF):
         f_best = None
 
         DPKL, DPPre = fastMaxDivDP(g, h, self.N, self.k)
-        for j in range(k, self.N+1):
+        for j in range(self.k, self.N+1):
             t = ThresMaxDiv(DPPre, j, self.k, segment_thre_list)
             if t is None:
                 continue
@@ -67,11 +88,10 @@ if __name__ == "__main__":
     F = results.F
 
     data = pd.read_csv(DATA_PATH)
-    negative_sample = data.loc[(data['label'] == 0)]
+    negative_sample = data.loc[(data['label'] != 1)]
     positive_sample = data.loc[(data['label'] == 1)]
     train_negative, test_negative = train_test_split(negative_sample, test_size = 0.7, random_state = 0)
     
-
     pos_keys            = list(positive_sample['key'])
     pos_scores          = list(positive_sample['score'])
     train_neg_keys      = list(train_negative['key'])
@@ -80,16 +100,12 @@ if __name__ == "__main__":
     test_neg_scores     = list(test_negative['score'])
 
     plbf = FastPLBFpp(pos_keys, pos_scores, train_neg_scores, F, N, k)
-    
-    print("t:", plbf.t)
-    print("f:", plbf.f)
-    print("S_:", plbf.memory_usage_of_backup_bf)
 
-
-    # assert
+    # assert : no false negative
     for key, score in zip(pos_keys, pos_scores):
         assert(plbf.contains(key, score))
     
+    # test
     fp_cnt = 0
     for key, score in zip(test_neg_keys, test_neg_scores):
         if plbf.contains(key, score):

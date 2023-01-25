@@ -1,7 +1,5 @@
 import math
-from typing import Tuple
 from collections.abc import Callable
-from utils.prList import prList
 from utils.const import INF
 
 def matrix_problem_on_monotone_matrix(f: Callable[[int, int], float], n: int, m: int) -> list[int]:
@@ -15,12 +13,6 @@ def matrix_problem_on_monotone_matrix(f: Callable[[int, int], float], n: int, m:
 
     Returns:
         list[int]: a[i] = J(i) (i.e., a[i] is the smallest j that B_{i,j} equals the maximum value of the i-th row of B).
-    """
-    
-    """_summary_
-
-    Returns:
-        _type_: _description_
     """
 
     a = [None for i in range(n + 1)]

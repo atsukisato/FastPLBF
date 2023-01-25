@@ -23,12 +23,6 @@ class PLBF:
             k (int): number of regions
         """
 
-        self.assert_and_init_parameters(pos_keys, pos_scores, neg_scores, F, N, k)
-        segment_thre_list, g, h = self.divide_into_segments(pos_scores, neg_scores)
-        self.find_best_t_and_f(segment_thre_list, g, h)
-        self.insert_keys(pos_keys, pos_scores)
-
-    def assert_and_init_parameters(self, pos_keys: list, pos_scores: list[float], neg_scores: list[float], F: float, N: int, k: int):
         # assert 
         assert(isinstance(pos_keys, list))
         assert(isinstance(pos_scores, list))
@@ -44,11 +38,17 @@ class PLBF:
         for score in neg_scores:
             assert(0 <= score <= 1)
 
-        # init
+        
         self.F = F
         self.N = N
         self.k = k
         self.n = len(pos_keys)
+
+
+        segment_thre_list, g, h = self.divide_into_segments(pos_scores, neg_scores)
+        self.find_best_t_and_f(segment_thre_list, g, h)
+        self.insert_keys(pos_keys, pos_scores)
+
 
     def divide_into_segments(self, pos_scores: list[float], neg_scores: list[float]):
         segment_thre_list = [i / self.N for i in range(self.N + 1)]
@@ -134,7 +134,6 @@ if __name__ == "__main__":
     positive_sample = data.loc[(data['label'] == 1)]
     train_negative, test_negative = train_test_split(negative_sample, test_size = 0.7, random_state = 0)
     
-
     pos_keys            = list(positive_sample['key'])
     pos_scores          = list(positive_sample['score'])
     train_neg_keys      = list(train_negative['key'])
@@ -142,15 +141,9 @@ if __name__ == "__main__":
     test_neg_keys       = list(test_negative['key'])
     test_neg_scores     = list(test_negative['score'])
 
-
     plbf = PLBF(pos_keys, pos_scores, train_neg_scores, F, N, k)
-    
-    print("t:", plbf.t)
-    print("f:", plbf.f)
-    print("S_:", plbf.memory_usage_of_backup_bf)
 
-
-    # assert
+    # assert : no false negative
     for key, score in zip(pos_keys, pos_scores):
         assert(plbf.contains(key, score))
     

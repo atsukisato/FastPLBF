@@ -6,7 +6,7 @@ from utils.const import INF
 
 
 def ThresMaxDivDP(g: prList, h: prList, j: int, k: int) -> list[float]:
-    """_summary_
+    """
 
     Args:
         g (prList): key density of each segmenet
@@ -28,7 +28,7 @@ def ThresMaxDivDP(g: prList, h: prList, j: int, k: int) -> list[float]:
 
     DPKL, DPPre = calc_DPKL(g, h, k)
 
-    # DPPre[j-1][k-1]から逆にたどっていく
+    #  tracing the transitions backward from DPPre[j-1][k-1]
     if DPPre[j-1][k-1] is None:
         return None
 
@@ -86,7 +86,7 @@ def ThresMaxDiv(DPPre: list[list[int]], j: int, k: int, thre_list: list[float]):
     assert(isinstance(j, int))
     assert(isinstance(k, int))
     
-    # DPPre[j-1][k-1]から逆にたどっていく
+    # tracing the transitions backward from DPPre[j-1][k-1]
     if DPPre[j-1][k-1] is None:
         return None
 
@@ -118,12 +118,7 @@ def fastMaxDivDP(g: prList, h: prList, N: int, k: int) -> Tuple[list[list[float]
         Tuple[list[list[float]], list[list[int]]]: DPKL, DPPre
     """
 
-    assert(isinstance(g, prList))
-    assert(isinstance(h, prList))
-    assert(isinstance(N, int))
-    assert(isinstance(k, int))
     N = g.N
-    assert(h.N == N)
 
     DPKL, DPPre = fast_calc_DPKL(g, h, k)
     return DPKL, DPPre
