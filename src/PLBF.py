@@ -153,4 +153,5 @@ if __name__ == "__main__":
         if plbf.contains(key, score):
             fp_cnt += 1
     
+    print(f"Memory Usage of Backup BF: {plbf.memory_usage_of_backup_bf}")
     print(f"False Positive Rate: {fp_cnt / len(test_neg_keys)} [{fp_cnt} / {len(test_neg_keys)}]")
