@@ -44,7 +44,7 @@ def make_scores_list(pr_list, N, n):
             scores_list.append(score)
     return scores_list
 
-def test(test_times = 1, N = 1000, F = 0.001, k = 5, n = 100000, test_neg_num = 100000, ideal = True):
+def test(test_times = 1, N = 1000, F = 0.001, k = 5, n = 1000000, test_neg_num = 1000000, ideal = True):
 
     for seed in range(test_times):
         random.seed(seed)
@@ -94,5 +94,5 @@ def test(test_times = 1, N = 1000, F = 0.001, k = 5, n = 100000, test_neg_num = 
     
 
 if __name__ == "__main__":
-    test(test_times = 10, N = 100, ideal = True)
-    test(test_times = 10, N = 100, ideal = False)
+    test(test_times = 100, ideal = True)
+    test(test_times = 100, ideal = False)
