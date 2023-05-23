@@ -1,6 +1,6 @@
-from PLBF import PLBF
-from FastPLBF import FastPLBF
-from FastPLBFpp import FastPLBFpp
+from PLBFs.PLBF import PLBF
+from PLBFs.FastPLBF import FastPLBF
+from PLBFs.FastPLBFpp import FastPLBFpp
 
 import random
 import time

@@ -5,6 +5,7 @@ from utils.ExpectedFPR import ExpectedFPR
 from utils.const import INF
 from PLBF_M import PLBF_M
 
+import time
 import argparse
 import pandas as pd
 from sklearn.model_selection import train_test_split
@@ -98,7 +99,9 @@ if __name__ == "__main__":
     test_neg_keys       = list(test_negative['key'])
     test_neg_scores     = list(test_negative['score'])
 
+    construct_start = time.time()
     plbf = FastPLBF_M(pos_keys, pos_scores, train_neg_scores, M, N, k)
+    construct_end = time.time()
 
     # assert : no false negative
     for key, score in zip(pos_keys, pos_scores):
@@ -110,6 +113,7 @@ if __name__ == "__main__":
         if plbf.contains(key, score):
             fp_cnt += 1
     
+    print(f"Construction Time: {construct_end - construct_start}")
     print(f"Memory Usage of Backup BF: {plbf.memory_usage_of_backup_bf}")
     print(f"False Positive Rate: {fp_cnt / len(test_neg_keys)} [{fp_cnt} / {len(test_neg_keys)}]")
 
