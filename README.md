@@ -1,6 +1,12 @@
 # Fast Partitioned Learned Bloom Filter
 
 The Python files contain the implementation of PLBF, FastPLBF, FastPLBF++.
+Each of these methods are implemented in two different frameworks: one was designed in the PLBF paper, and the other is our modified version.
+Before running these, please run the followings as a setup.
+```
+poetry install
+poetry shell
+```
 
 ## Methods to minimize the memory usage under the condition of expected false positive rate.
 
