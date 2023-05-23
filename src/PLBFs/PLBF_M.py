@@ -1,6 +1,7 @@
 from utils.ThresMaxDivDP import ThresMaxDivDP
-from utils.OptimalFPR import OptimalFPR
+from utils.OptimalFPR_M import OptimalFPR_M
 from utils.SpaceUsed import SpaceUsed
+from utils.ExpectedFPR import ExpectedFPR
 from utils.prList import prList
 from utils.const import INF, EPS
 
@@ -57,7 +58,7 @@ class PLBF_M:
         return segment_thre_list, g, h
 
     def find_best_t_and_f(self, segment_thre_list, g, h):
-        minSpaceUsed = INF
+        minExpectedFPR = INF
         t_best = None
         f_best = None
 
@@ -65,15 +66,15 @@ class PLBF_M:
             t = ThresMaxDivDP(g, h, j, self.k)
             if t is None:
                 continue
-            f = OptimalFPR(g, h, t, self.F, self.k)
-            if minSpaceUsed > SpaceUsed(g, h, t, f, self.n):
-                minSpaceUsed = SpaceUsed(g, h, t, f, self.n)
+            f = OptimalFPR_M(g, h, t, self.M, self.k)
+            if minExpectedFPR > ExpectedFPR(g, h, t, f, self.n):
+                minExpectedFPR = ExpectedFPR(g, h, t, f, self.n)
                 t_best = t
                 f_best = f
 
         self.t = t_best
         self.f = f_best
-        self.memory_usage_of_backup_bf = minSpaceUsed
+        self.memory_usage_of_backup_bf = SpaceUsed(g, h, t, f, self.n)
 
     def insert_keys(self, pos_keys: list, pos_scores: list[float]):
         pos_cnt_list = [0 for _ in range(self.k + 1)]

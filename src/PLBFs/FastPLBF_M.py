@@ -1,6 +1,7 @@
 from utils.ThresMaxDivDP import MaxDivDP, ThresMaxDiv
-from utils.OptimalFPR import OptimalFPR
+from utils.OptimalFPR_M import OptimalFPR_M
 from utils.SpaceUsed import SpaceUsed
+from utils.ExpectedFPR import ExpectedFPR
 from utils.const import INF
 from PLBF_M import PLBF_M
 
@@ -8,7 +9,7 @@ import argparse
 import pandas as pd
 from sklearn.model_selection import train_test_split
 
-class FastPLBF_M(PLBF):
+class FastPLBF_M(PLBF_M):
     def __init__(self, pos_keys: list, pos_scores: list[float], neg_scores: list[float], M: float, N: int, k: int):
         """
         Args:
@@ -56,15 +57,15 @@ class FastPLBF_M(PLBF):
             t = ThresMaxDiv(DPPre, j, self.k, segment_thre_list)
             if t is None:
                 continue
-            f = OptimalFPR(g, h, t, self.F, self.k)
-            if minSpaceUsed > SpaceUsed(g, h, t, f, self.n):
-                minSpaceUsed = SpaceUsed(g, h, t, f, self.n)
+            f = OptimalFPR_M(g, h, t, self.M, self.k)
+            if minExpectedFPR > ExpectedFPR(g, h, t, f, self.n):
+                minExpectedFPR = ExpectedFPR(g, h, t, f, self.n)
                 t_best = t
                 f_best = f
 
         self.t = t_best
         self.f = f_best
-        self.memory_usage_of_backup_bf = minSpaceUsed
+        self.memory_usage_of_backup_bf = SpaceUsed(g, h, t, f, self.n)
 
 
 if __name__ == "__main__":
