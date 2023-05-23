@@ -24,6 +24,6 @@ The Python files contain the implementation of PLBF, FastPLBF, FastPLBF++.
 - `--M`: Target memory usage for backup Bloom filters
 
 **Commands**
-- run the PLBF_M: `python src/PLBFs/PLBF_M.py --data_path data/example.csv --N 50 --k 5 --M 2043`
-- run the FastPLBF_M: `python src/PLBFs/FastPLBF_M.py --data_path data/example.csv --N 50 --k 5 --M 2043`
-- run the FastPLBF++_M: `python src/PLBFs/FastPLBFpp_M.py --data_path data/example.csv --N 50 --k 5 --M 2043`
+- run the PLBF_M: `python src/PLBFs/PLBF_M.py --data_path data/example.csv --N 50 --k 5 --M 1000`
+- run the FastPLBF_M: `python src/PLBFs/FastPLBF_M.py --data_path data/example.csv --N 50 --k 5 --M 1000`
+- run the FastPLBF++_M: `python src/PLBFs/FastPLBFpp_M.py --data_path data/example.csv --N 50 --k 5 --M 1000`
