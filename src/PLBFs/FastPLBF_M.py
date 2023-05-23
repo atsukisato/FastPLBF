@@ -48,7 +48,7 @@ class FastPLBF_M(PLBF_M):
         self.insert_keys(pos_keys, pos_scores)
         
     def find_best_t_and_f(self, segment_thre_list, g, h):
-        minSpaceUsed = INF
+        minExpectedFPR = INF
         t_best = None
         f_best = None
 
@@ -57,7 +57,7 @@ class FastPLBF_M(PLBF_M):
             t = ThresMaxDiv(DPPre, j, self.k, segment_thre_list)
             if t is None:
                 continue
-            f = OptimalFPR_M(g, h, t, self.M, self.k)
+            f = OptimalFPR_M(g, h, t, self.M, self.k, self.n)
             if minExpectedFPR > ExpectedFPR(g, h, t, f, self.n):
                 minExpectedFPR = ExpectedFPR(g, h, t, f, self.n)
                 t_best = t

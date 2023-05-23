@@ -57,7 +57,7 @@ class FastPLBFpp_M(PLBF_M):
             t = ThresMaxDiv(DPPre, j, self.k, segment_thre_list)
             if t is None:
                 continue
-            f = OptimalFPR_M(g, h, t, self.M, self.k)
+            f = OptimalFPR_M(g, h, t, self.M, self.k, self.n)
             if minExpectedFPR > ExpectedFPR(g, h, t, f, self.n):
                 minExpectedFPR = ExpectedFPR(g, h, t, f, self.n)
                 t_best = t

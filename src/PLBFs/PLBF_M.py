@@ -66,7 +66,7 @@ class PLBF_M:
             t = ThresMaxDivDP(g, h, j, self.k)
             if t is None:
                 continue
-            f = OptimalFPR_M(g, h, t, self.M, self.k)
+            f = OptimalFPR_M(g, h, t, self.M, self.k, self.n)
             if minExpectedFPR > ExpectedFPR(g, h, t, f, self.n):
                 minExpectedFPR = ExpectedFPR(g, h, t, f, self.n)
                 t_best = t
