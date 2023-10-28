@@ -1,6 +1,6 @@
 # Fast Partitioned Learned Bloom Filter
 
-This repository contains python implementation for our paper: [Fast Partitioned Learned Bloom Filter](https://arxiv.org/abs/2306.02846).
+This repository contains python implementation for our paper "[Fast Partitioned Learned Bloom Filter](https://arxiv.org/abs/2306.02846)" (NeurIPS 2023).
 Three methods (PLBF, fast PLBF, and fast PLBF++) are implemented in two different frameworks: one was designed in the PLBF paper, and the other is our modified version.
 
 ## Abstract
