@@ -77,7 +77,7 @@ class PLBF:
         self.memory_usage_of_backup_bf = minSpaceUsed
 
     def insert_keys(self, pos_keys: list, pos_scores: list[float]):
-        pos_cnt_list = [0 for _ in range(self.k + 1)]
+        pos_cnt_list = [1 for _ in range(self.k + 1)]
         for score in pos_scores:
             region_idx = self.get_region_idx(score)
             pos_cnt_list[region_idx] += 1

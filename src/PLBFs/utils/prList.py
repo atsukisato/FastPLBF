@@ -19,7 +19,7 @@ class prList:
         self.thre_list = thre_list
         self.N = len(thre_list) - 1
 
-        cnt_list = [0 for _ in range(self.N + 1)]
+        cnt_list = [1 for _ in range(self.N + 1)]
         for score in scores:
             assert(0 <= score <= 1)
 
@@ -31,8 +31,8 @@ class prList:
             assert(1 <= segment_idx <= self.N)
 
             cnt_list[segment_idx] += 1
-        
-        total_cnt = len(scores)
+
+        total_cnt = sum(cnt_list[1:])
 
         self.pr = [0.0 for i in range(self.N+1)]
         self.accPr = [0.0 for i in range(self.N+1)]
