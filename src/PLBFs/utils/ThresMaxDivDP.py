@@ -1,8 +1,8 @@
 from typing import Tuple
-from utils.prList import prList
-from utils.calc_DPKL import calc_DPKL
-from utils.fast_calc_DPKL import fast_calc_DPKL
-from utils.const import INF
+from .prList import prList
+from .calc_DPKL import calc_DPKL
+from .fast_calc_DPKL import fast_calc_DPKL
+from .const import INF
 
 
 def ThresMaxDivDP(g: prList, h: prList, j: int, k: int) -> list[float]:

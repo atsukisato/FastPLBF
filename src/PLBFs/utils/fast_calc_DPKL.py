@@ -1,8 +1,8 @@
 import math
 from typing import Tuple
-from utils.prList import prList
-from utils.const import INF
-from utils.matrix_problem_on_monotone_matrix import matrix_problem_on_monotone_matrix
+from .prList import prList
+from .const import INF
+from .matrix_problem_on_monotone_matrix import matrix_problem_on_monotone_matrix
 
 
 

@@ -1,5 +1,5 @@
-from utils.prList import prList
-from utils.const import EPS
+from .prList import prList
+from .const import EPS
 
 def OptimalFPR(g: prList, h: prList, t: list[float], F: float, k: int) -> list[float]:
     """_summary_

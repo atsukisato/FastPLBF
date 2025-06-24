@@ -1,5 +1,5 @@
-from utils.prList import prList
-from utils.const import EPS
+from .prList import prList
+from .const import EPS
 import math
 
 def calc_K_sum(pos_pr_list: list[float], neg_pr_list: list[float], valid_list: list[bool]) -> float:

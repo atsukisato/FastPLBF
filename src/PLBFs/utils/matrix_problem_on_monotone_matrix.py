@@ -1,6 +1,6 @@
 import math
 from collections.abc import Callable
-from utils.const import INF
+from .const import INF
 
 def matrix_problem_on_monotone_matrix(f: Callable[[int, int], float], n: int, m: int) -> list[int]:
     

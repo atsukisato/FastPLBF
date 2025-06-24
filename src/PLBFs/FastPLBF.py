@@ -1,8 +1,11 @@
-from utils.ThresMaxDivDP import MaxDivDP, ThresMaxDiv
-from utils.OptimalFPR import OptimalFPR
-from utils.SpaceUsed import SpaceUsed
-from utils.const import INF
-from PLBF import PLBF
+import sys
+import os
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+from PLBFs.utils.ThresMaxDivDP import MaxDivDP, ThresMaxDiv
+from PLBFs.utils.OptimalFPR import OptimalFPR
+from PLBFs.utils.SpaceUsed import SpaceUsed
+from PLBFs.utils.const import INF
+from PLBFs.PLBF import PLBF
 
 import time
 import argparse

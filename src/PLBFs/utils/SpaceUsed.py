@@ -1,5 +1,5 @@
 import math
-from utils.prList import prList
+from .prList import prList
 
 def SpaceUsed(g: prList, h: prList, t: list[float], f: list[float], n: int) -> float:
     """

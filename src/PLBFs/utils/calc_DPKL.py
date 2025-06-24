@@ -1,7 +1,7 @@
 import math
 from typing import Tuple
-from utils.prList import prList
-from utils.const import INF
+from .prList import prList
+from .const import INF
 
 
 def calc_DPKL(g: prList, h: prList, k: int, j: int = None) -> Tuple[list[list[float]], list[list[int]]]:

@@ -1,9 +1,12 @@
-from utils.ThresMaxDivDP import MaxDivDP, ThresMaxDiv
-from utils.OptimalFPR_M import OptimalFPR_M
-from utils.SpaceUsed import SpaceUsed
-from utils.ExpectedFPR import ExpectedFPR
-from utils.const import INF
-from PLBF_M import PLBF_M
+import sys
+import os
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+from PLBFs.utils.ThresMaxDivDP import MaxDivDP, ThresMaxDiv
+from PLBFs.utils.OptimalFPR_M import OptimalFPR_M
+from PLBFs.utils.SpaceUsed import SpaceUsed
+from PLBFs.utils.ExpectedFPR import ExpectedFPR
+from PLBFs.utils.const import INF
+from PLBFs.PLBF_M import PLBF_M
 
 import time
 import argparse
