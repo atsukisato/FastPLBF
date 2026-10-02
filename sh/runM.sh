@@ -12,4 +12,7 @@ for M in ${Ms[@]}; do
     echo "Running FastPLBFpp_M"
     python src/PLBFs/FastPLBFpp_M.py --data_path data/example.csv --N 50 --k 5 --M $M
     echo ""
+    echo "Running FastPLBFsharp_M"
+    python src/PLBFs/FastPLBFsharp_M.py --data_path data/example.csv --N 50 --k 5 --M $M
+    echo ""
 done
