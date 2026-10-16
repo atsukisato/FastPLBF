@@ -2,6 +2,7 @@ from typing import Tuple
 from .prList import prList
 from .calc_DPKL import calc_DPKL
 from .fast_calc_DPKL import fast_calc_DPKL
+from .fast_calc_DPKL_sharp import fast_calc_DPKL_sharp
 from .const import INF
 
 
@@ -121,4 +122,22 @@ def fastMaxDivDP(g: prList, h: prList, N: int, k: int) -> Tuple[list[list[float]
     N = g.N
 
     DPKL, DPPre = fast_calc_DPKL(g, h, k)
+    return DPKL, DPPre
+
+def sharpMaxDivDP(g: prList, h: prList, N: int, k: int) -> Tuple[list[list[float]], list[list[int]]]:
+    """
+
+    Args:
+        g (prList): key density of each segmenet
+        h (prList): non-keye density of each segmenet
+        N (int): number of segments
+        k (int): number of regions
+
+    Returns:
+        Tuple[list[list[float]], list[list[int]]]: DPKL, DPPre
+    """
+
+    N = g.N
+
+    DPKL, DPPre = fast_calc_DPKL_sharp(g, h, k)
     return DPKL, DPPre
