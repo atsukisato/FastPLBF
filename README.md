@@ -3,7 +3,7 @@
 This repository contains the Python implementation for the following papers:
 
 - Atsuki Sato and Yusuke Matsui. **"Fast Partitioned Learned Bloom Filter."** NeurIPS 2023. [[arXiv](https://arxiv.org/abs/2306.02846)]
-- Atsuki Sato and Yusuke Matsui. **"Fast Construction of Partitioned Learned Bloom Filter with Theoretical Guarantees."** The VLDB Journal, 2026 (accepted / to appear). [[arXiv](https://arxiv.org/abs/2410.13278)]
+- Atsuki Sato and Yusuke Matsui. **"Fast Construction of Partitioned Learned Bloom Filter with Theoretical Guarantees."** The VLDB Journal, 2026. [[arXiv](https://arxiv.org/abs/2410.13278)]
 
 ## Methods
 
